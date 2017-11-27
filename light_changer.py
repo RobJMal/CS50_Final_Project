@@ -15,7 +15,7 @@ colors = {
 	"violet" : [0.2300, 0.045]
 }
 
-# Changes the color of the light by changing the hue value (values from 0 to 65535)
+# Changes the color of the light by changing the xy value
 # Method learned from https://developers.meethue.com/content/python-requests-library-access-hue-bridge
 def change_color(color):
 	new_color = {"on":True, "xy":color}
