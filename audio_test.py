@@ -8,7 +8,7 @@ import numpy as np
 chunk = 2048
 
 # open up a wave
-wf = wave.open('bday.wav', 'rb')
+wf = wave.open('test.wav', 'rb')
 swidth = wf.getsampwidth()
 RATE = wf.getframerate()
 # use a Blackman window
