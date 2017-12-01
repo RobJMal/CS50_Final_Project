@@ -3,7 +3,7 @@ import requests
 import time 
 
 # Stores url for Hue Light 1 
-light1_url = "http://169.254.82.129/api/99MmFck8z1xaA3jvKD1oJD8wVvYyr3iZdOY4vw1U/lights/1/state"
+light1_url = "http://192.168.1.173/api/99MmFck8z1xaA3jvKD1oJD8wVvYyr3iZdOY4vw1U/lights/1/state"
 
 colors = {
 	"red" : [0.7, 0.25],
