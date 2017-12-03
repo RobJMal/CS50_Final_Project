@@ -10,7 +10,10 @@ import math
 import requests
 import json 
 from statistics import median  
+import time 
 
+# Note that will be analyzed 
+note = int(input("What note should we reach? "))
 
 chunk = 2048 #1024
 FORMAT = pyaudio.paInt16
@@ -59,14 +62,11 @@ for chunk_number in range(0, int(len(freq_data)/10)):
 
 	medians.append(median(chunk_array))
 
-# Note that will be analyzed 
-note = 440
-
 # Counts how many notes are within range 
 in_range = 0 
 
 for k in range(0, len(medians)):
-	if (note - 10) < medians[k] <= (note + 10): 
+	if (note - 10) <= medians[k] <= (note + 10): 
 		in_range+=1 
 
 # Measures how many medians are within range 
@@ -76,10 +76,15 @@ print(medians)
 
 # Checks if 50% of notes are within range 
 if score > 50:
-	print("Green light")
+	requests.put("http://169.254.82.129/api/99MmFck8z1xaA3jvKD1oJD8wVvYyr3iZdOY4vw1U/lights/1/state", data=json.dumps({"on":True, "hue":25500}))
 else:
-	print("Red light")
+	requests.put("http://169.254.82.129/api/99MmFck8z1xaA3jvKD1oJD8wVvYyr3iZdOY4vw1U/lights/1/state", data=json.dumps({"on":True, "hue":65500}))
 
+# Delays light turn off
+time.sleep(2)
+
+# Turns off light
+requests.put("http://169.254.82.129/api/99MmFck8z1xaA3jvKD1oJD8wVvYyr3iZdOY4vw1U/lights/1/state", data=json.dumps({"on":False}))
 
 # if 435 <= Frequency <= 445:
  #    requests.put("http://192.168.1.173/api/99MmFck8z1xaA3jvKD1oJD8wVvYyr3iZdOY4vw1U/lights/1/state", data=json.dumps({"on":True, "hue":65500}))
