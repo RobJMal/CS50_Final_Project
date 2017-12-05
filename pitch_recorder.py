@@ -50,6 +50,8 @@ for i in range(0, int(RATE / chunk * RECORD_SECONDS)):
     	freq_data.append(Frequency)
     	print(f"{Frequency} Frequency")
 
+print(len(freq_data))
+
 # Stores medians of frequencies when analyzed by chunks of 10 
 medians = []
 
@@ -75,7 +77,7 @@ score = (in_range / len(medians)) * 100
 print(medians)
 
 # Checks if 50% of notes are within range 
-if score > 50:
+if score >= 25:
 	requests.put("http://169.254.82.129/api/99MmFck8z1xaA3jvKD1oJD8wVvYyr3iZdOY4vw1U/lights/1/state", data=json.dumps({"on":True, "hue":25500}))
 else:
 	requests.put("http://169.254.82.129/api/99MmFck8z1xaA3jvKD1oJD8wVvYyr3iZdOY4vw1U/lights/1/state", data=json.dumps({"on":True, "hue":65500}))

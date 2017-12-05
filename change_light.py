@@ -4,6 +4,8 @@
 import requests
 import json 
 
+requests.put("http://169.254.82.129/api/99MmFck8z1xaA3jvKD1oJD8wVvYyr3iZdOY4vw1U/lights/1/state", data=json.dumps({"on":True, "xy":[0.5, 0.5]}))
+
 class HueLightBulb:
 
 	# NEED TO MAKE THE BULB NUMBER DYNAMIC 

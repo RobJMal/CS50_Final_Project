@@ -4,7 +4,7 @@ import change_light
 import json
 import requests
 
-bulb1 = HueLightBulb("http://192.168.1.173/api/99MmFck8z1xaA3jvKD1oJD8wVvYyr3iZdOY4vw1U/lights")
+bulb1 = HueLightBulb("http://169.254.82.129/api/99MmFck8z1xaA3jvKD1oJD8wVvYyr3iZdOY4vw1U/lights")
 
 window = tk.Tk()
 window.title("Synthesia")
