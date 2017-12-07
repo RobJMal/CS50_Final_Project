@@ -17,6 +17,12 @@ var detectorElem,
 	detuneAmount;
 var url = "http://169.254.82.129/api/99MmFck8z1xaA3jvKD1oJD8wVvYyr3iZdOY4vw1U/lights";
 // var url = "http://169.254.82.129/api/99MmFck8z1xaA3jvKD1oJD8wVvYyr3iZdOY4vw1U/lights/1/state";
+// Dictionary that stores colors for xy values 
+var dict = {
+  key1: "value1",
+  key2: "value2"
+  // etc.
+};
 
 
 window.onload = function() {
@@ -328,11 +334,15 @@ function updatePitch( time ) {
  	} else {
 	 	detectorElem.className = "confident";
 	 	pitch = ac;
-	 	pitchElem.innerText = Math.round( pitch ) ; //OH MY GOD
-	 	pitch_50 = Math.round( pitch ) ; // OUR PITCH TO USE
-	 	var note =  noteFromPitch( pitch ); //!@#$!@#$!#@$#!@$!#@$#@$#@$#!@$!#$#!@$#@$#@!$#@$#1
+	 	pitchElem.innerText = Math.round( pitch ) ;
+	 	var note =  noteFromPitch( pitch );
 		noteElem.innerHTML = noteStrings[note%12];
 		var detune = centsOffFromPitch( pitch, note );
+
+
+	 	// turn on lightbulb to color that note equals
+	 	request.send(JSON.stringify({"xy":notes_to_color[note]}));
+
 		if (detune == 0 ) {
 			detuneElem.className = "";
 			detuneAmount.innerHTML = "--";
@@ -352,60 +362,62 @@ function updatePitch( time ) {
 
 // Code for Light Bulb, vars defined at top
 
-// Dictionary that stores colors for xy values 
-var dict = {
-  key1: "value1",
-  key2: "value2"
-  // etc.
-};
-var notes_to_color = {
-	"C": "[0.1, 0.7]", 
-	["C#"]: [0.25, 0.41],
-	"Db": [0.25, 0.41],
-	"D": [0.1, 0.24], 
-	"D#": [1.9, 0.6],
-	"Eb": [1.9, 0.6], 
-	"E": [0.3, 0.9],
-	"F": [0.21, 0.2],
-	"F#": [0.25, 0.5],
-	"Gb": [0.25, 0.5],
-	"G": [0.7, 0.26],
-	"G#": [0.6, 0.36],
-	"Ab": [0.6, 0.36],
-	A: "[0.58, 0.4]",
-	"A#": [0.4, 0.54],
-	"Bb": [0.4, 0.54],
-	"B": [0.5, 0.49]
-}
-
-request.open("PUT", url, true);
-request.setRequestHeader('Content-Type', 'application/json');
-
 function bulbOn() {
+	request.open("PUT", url, true);
+	request.setRequestHeader('Content-Type', 'application/json');
 	request.send(JSON.stringify({"on":true}));
 }
-
 function bulbOff() {
+	request.open("PUT", url, true);
+	request.setRequestHeader('Content-Type', 'application/json');
 	request.send(JSON.stringify({"on":false}));
 }
 
-function singA() {
-	if (noteElem.innerHTML == "A") {
-		// request.send(JSON.stringify({"hue":35000}));
-		request.send(JSON.stringify({"xy":notes_to_color['A']}));
-		console.log("success")
-	}
+// 12 functions for turning on the lightbulb to the color of the specified note
+// We are aware that it'd be easier if the user typed in a note and we had only one function that inserted
+// that note into the dictionary, but we also think that it'd be more fun and user-friendly if the user could
+// click on lots of different buttons and change the light bulbs colors quickly.
+
+// Only one function because getting value
+function noteC() {
+	LightOnHue();
+}
+function noteCSharp() {
+	request.send(JSON.stringify({"xy":notes_to_color['C#']}));
+}
+function noteD() {
+	request.send(JSON.stringify({"xy":notes_to_color['D']}));
+}
+function noteDSharp() {
+	request.send(JSON.stringify({"xy":notes_to_color['D#']}));
+}
+function noteE() {
+	request.send(JSON.stringify({"xy":notes_to_color['E']}));
+}
+function noteF() {
+	request.send(JSON.stringify({"xy":notes_to_color['F']}));
+}
+function noteFSharp() {
+	request.send(JSON.stringify({"xy":notes_to_color['F#']}));
+}
+function noteG() {
+	request.send(JSON.stringify({"xy":notes_to_color['G']}));
+}
+function noteGSharp() {
+	request.send(JSON.stringify({"xy":notes_to_color['G#']}));
+}
+function noteA() {
+	request.send(JSON.stringify({"xy":notes_to_color['A']}));
+}
+function noteASharp() {
+	request.send(JSON.stringify({"xy":notes_to_color['A#']}));
+}
+function noteB() {
+	request.send(JSON.stringify({"xy":notes_to_color['B']}));
 }
 
-//beautiful hash table and function  or trie created here
 
-// make pitches related to different colors; look at colorful keyboard
-function sing() {
-	toggleLiveInput // which calls gotStream, which calls updatePitch
-	//hashtable (pitch_50)
-
-}
-
+// call several functions in a row, on off with 5 second wait
 
 if (435 < pitchElem.innerText || pitchElem.innerText < 450) {
 request.send(JSON.stringify({"on":true}));
