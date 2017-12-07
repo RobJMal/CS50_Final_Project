@@ -45,31 +45,6 @@ let notes_to_Hue = {
 };
 
 
-let octave_lower_bound = {
-	16: 0,
-	32: 1,
-	65 : 2,
-	130 : 3,
-	261 : 4,
-	523 : 5,
-	1046: 6,
-	2093: 7,
-	4186: 8   
-}; 
-
-let octave_upper_bound = {
-	30: 0,
-	61: 1,
-	123 : 2,
-	246 : 3,
-	493 : 4,
-	987 : 5,
-	1975 : 6,
-	2951 : 7,
-	7902 : 8
-}; 
-
-
 var audioContext = null;
 var isPlaying = false;
 var sourceNode = null;
@@ -358,18 +333,6 @@ function LightOnHueSecond(satVal, hueVal) {
 	request.send(JSON.stringify({"on":true, "sat": satVal, "hue":hueVal}));
 }
 
-// Transforms note to within A4 to G4 
-//note * Math.pow(2, 4-octave)
-
-// Checks if the user is signing with range
-// function noteToLightCheck(range1, range2, note_match, note_user, satVal, hueVal) {
-	// Gets the value from the HTML button via radio command 
-	// note_match = document.getElementByName("note"); 
-
-	// Pass through some dictionary 
-// }
-
-
 // Updates pitch that it is picking up 
 function updatePitch( time ) {
 	var cycles = new Array;
@@ -419,7 +382,7 @@ function updatePitch( time ) {
 		var note_50 = noteStrings[note%12];
 		let octave;
 
-		// Approximates octave 
+		// Approximates octave that the user's pitch is in 
 	 	if (pitch_50 > 16 && pitch_50 < 31){
 	 		octave = 0;
 	 	}
@@ -544,54 +507,3 @@ function noteB() {
 	LightOnHue(defaultSat, notes_to_Hue['B']);
 }
 
-
-// switch (calc_pitch) {
-		// 	case (261.63 - 5 < calc_pitch && calc_pitch < 261.63 + 5): 
-		// 		LightOnHue(1000)
-		// 		console.log('C4')
-		// 		// break;
-		//	case (277.18 - 5 < calc_pitch && calc_pitch < 277.18 + 5):
-		//		LightOnHue(35000)
-		//		console.log('C#4')
-				// break;
-		// 	case (293.66 - 5 < calc_pitch && calc_pitch < 293.66 + 5):
-		// 		// request.send(JSON.stringify({"hue":35000}));
-		// 		console.log('D4')
-		// 		// break;
-		// 	case (311.13):
-		// 		// request.send(JSON.stringify({"hue":35000}));
-		// 		console.log('D#4')
-		// 		// break;
-		// 	case 329.63:
-		// 		// request.send(JSON.stringify({"hue":35000}));
-		// 		console.log('E4')
-		// 		// break;
-		// 	case 349.23:
-		// 		// request.send(JSON.stringify({"hue":35000}));
-		// 		console.log('F4')
-		// 		// break;
-		// 	case 369.99:
-		// 		// request.send(JSON.stringify({"hue":35000}));
-		// 		console.log('F#4')
-		// 		// break;
-		// 	case 392.00:
-		// 		// request.send(JSON.stringify({"hue":35000}));
-		// 		console.log('G4')
-		// 		// break;
-		// 	case 415.30:
-		// 		// request.send(JSON.stringify({"hue":35000}));
-		// 		console.log('G#4')
-		// 		// break;
-		// 	case 440.00:
-		// 		LightOnHue(25500)
-		// 		console.log('A4')
-		// 		// break;
-		// 	case 466.16:
-		// 		LightOnHue(65500)
-		// 		console.log('A#4')
-		// 		// break;
-		// 	case 493.88:
-		// 		LightOnHue(65500)
-		// 		console.log('B4')
-		// 		// break;
-		// 	}
