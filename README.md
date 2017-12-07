@@ -1,5 +1,5 @@
-# **Synesthesia **
-## **Synopsis**
+# Synesthesia 
+## Synopsis
 Our project interacts with Phillips Hue Lightbulbs through sounds and music.  In general, the lightbulb will change color based on the pitch (frequency) that is picked up by the microphone. 
 
 ## Getting started 
@@ -33,7 +33,7 @@ brew install requests
 brew install json 
 ```
 
-## **Runthrough **
+## Runthrough 
 ### JavaScript/HTML 
 In order to change color based on the frequency, we first created a dictionary that corresponded each of the seven natural notes in an octave to seven distinct Hue values for the Philips Hue light bulb (the Hue value determines the color). We then refer to this dictionary both in the twelve functions (for the twelve different notes in an octave) written at the end of the javascript file and in the code we added to the updatepitch function. 
 
@@ -93,10 +93,13 @@ Various labels and buttons were placed on the GUI based in the need and perceive
 
 We wanted the notes to correspond to a certain color, so whenever the button is pressed, the bulb will turn a certain color.  
 
-## **Using the Project**
+## Using the Project
 ### Running the website (JavaScript/HTML)
 To use the project, simply download the source code to your computer.  
 
 After downloading the source code, simply open the synesthesia.html file.  Because all of the code is written in HTML and JavaScript, there is no backend code that needs run. 
 
 Allow the computer to have access to your microphone, and begin using your voice! 
+
+### Running the Python programs
+Simply run the ```python filename.py``` command in the command prompt.  Make sure the file is in the directory that you are currently in.
