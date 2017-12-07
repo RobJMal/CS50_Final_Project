@@ -413,32 +413,32 @@ function updatePitch( time ) {
 	 	pitch = ac;
 	 	pitchElem.innerText = Math.round(pitch) ;
 
-	 	pitch_50 = Math.round(pitch);
+	 	var pitch_50 = Math.round(pitch);
+	 	var note = noteFromPitch( pitch );
 
 	 	//setting octave pitch 
 	 	let octave = 0;
 
-	 	for(var key in octave_lower_bound){
-	 		if(pitch_50 > octave_lower_bound[key] && pitch_50 < octave_upper_bound[key]){
+	 	for (var key in octave_lower_bound){
+	 		if (pitch_50 > octave_lower_bound[key] && pitch_50 < octave_upper_bound[key]){
 	 			console.log(key);
 	 			console.log(octave_lower_bound);
-	 			octave = i;
+	 			octave = key;
 	 		}
-		};
+		}
 	 	
 	 	// Transforms the user's pitch to number within 4th octave freq. range. 
 	 	let users_pitch_trans = pitch_50 * Math.pow(2, 4 - octave); 
 
 	 	// Calculates the range of the target note 
-		let range1 = note_val - 5;
-		let range2 = note_val + 5;
+		let range1 = notes_freq_obj[note] - 5;
+		let range2 = notes_freq_obj[note] + 5;
 
 		// Checks if the user is singing on key. Checks by pitch. If within +-5, glow green, else glow red
-		if (note_val - 5 < users_pitch_trans && users_pitch_trans < note_val + 5) {
-			LightOnHue(satVal, hueVal);
+		if (range1 < users_pitch_trans && users_pitch_trans < range2) {
+			LightOnHue(defaultSat, notes_to_Hue[note]);
 		}
 
-	 	var note = noteFromPitch( pitch );
 		noteElem.innerHTML = noteStrings[note%12];
 		var detune = centsOffFromPitch( pitch, note );
 		if (detune == 0 ) {
@@ -459,12 +459,17 @@ function updatePitch( time ) {
 }
 
 // Code for Light Bulb, vars defined at top
+// Turns on the lightbulb 
 function bulbOn() {
+	let request = new XMLHttpRequest();
 	request.open("PUT", url, true);
 	request.setRequestHeader('Content-Type', 'application/json');
 	request.send(JSON.stringify({"on":true}));
 }
+
+// Turns off the lightbulb 
 function bulbOff() {
+	let request = new XMLHttpRequest();
 	request.open("PUT", url, true);
 	request.setRequestHeader('Content-Type', 'application/json');
 	request.send(JSON.stringify({"on":false}));
