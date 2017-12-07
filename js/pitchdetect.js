@@ -1,3 +1,8 @@
+<<<<<<< HEAD
+=======
+// Code is obtained from https://github.com/cwilso/PitchDetect
+
+>>>>>>> bb716c3869945ddcae71103d19d0ab205b6f8dce
 /*
 The MIT License (MIT)
 
@@ -24,6 +29,12 @@ SOFTWARE.
 
 window.AudioContext = window.AudioContext || window.webkitAudioContext;
 
+<<<<<<< HEAD
+=======
+// Sets the url for the lightbulb 
+let url = "http://169.254.82.129/api/99MmFck8z1xaA3jvKD1oJD8wVvYyr3iZdOY4vw1U/lights/1/state";
+
+>>>>>>> bb716c3869945ddcae71103d19d0ab205b6f8dce
 var audioContext = null;
 var isPlaying = false;
 var sourceNode = null;
@@ -92,9 +103,11 @@ window.onload = function() {
 
 }
 
+
 function error() {
     alert('Stream generation failed.');
 }
+
 
 function getUserMedia(dictionary, callback) {
     try {
@@ -108,6 +121,7 @@ function getUserMedia(dictionary, callback) {
     }
 }
 
+
 function gotStream(stream) {
     // Create an AudioNode from the stream.
     mediaStreamSource = audioContext.createMediaStreamSource(stream);
@@ -118,6 +132,7 @@ function gotStream(stream) {
     mediaStreamSource.connect( analyser );
     updatePitch();
 }
+
 
 function toggleOscillator() {
     if (isPlaying) {
@@ -144,6 +159,7 @@ function toggleOscillator() {
 
     return "stop";
 }
+
 
 function toggleLiveInput() {
     if (isPlaying) {
@@ -211,49 +227,16 @@ function noteFromPitch( frequency ) {
 	return Math.round( noteNum ) + 69;
 }
 
+
 function frequencyFromNoteNumber( note ) {
 	return 440 * Math.pow(2,(note-69)/12);
 }
+
 
 function centsOffFromPitch( frequency, note ) {
 	return Math.floor( 1200 * Math.log( frequency / frequencyFromNoteNumber( note ))/Math.log(2) );
 }
 
-// this is a float version of the algorithm below - but it's not currently used.
-/*
-function autoCorrelateFloat( buf, sampleRate ) {
-	var MIN_SAMPLES = 4;	// corresponds to an 11kHz signal
-	var MAX_SAMPLES = 1000; // corresponds to a 44Hz signal
-	var SIZE = 1000;
-	var best_offset = -1;
-	var best_correlation = 0;
-	var rms = 0;
-
-	if (buf.length < (SIZE + MAX_SAMPLES - MIN_SAMPLES))
-		return -1;  // Not enough data
-
-	for (var i=0;i<SIZE;i++)
-		rms += buf[i]*buf[i];
-	rms = Math.sqrt(rms/SIZE);
-
-	for (var offset = MIN_SAMPLES; offset <= MAX_SAMPLES; offset++) {
-		var correlation = 0;
-
-		for (var i=0; i<SIZE; i++) {
-			correlation += Math.abs(buf[i]-buf[i+offset]);
-		}
-		correlation = 1 - (correlation/SIZE);
-		if (correlation > best_correlation) {
-			best_correlation = correlation;
-			best_offset = offset;
-		}
-	}
-	if ((rms>0.1)&&(best_correlation > 0.1)) {
-		console.log("f = " + sampleRate/best_offset + "Hz (rms: " + rms + " confidence: " + best_correlation + ")");
-	}
-//	var best_frequency = sampleRate/best_offset;
-}
-*/
 
 var MIN_SAMPLES = 0;  // will be initialized when AudioContext is created.
 var GOOD_ENOUGH_CORRELATION = 0.9; // this is the "bar" for how close a correlation needs to be
@@ -313,13 +296,45 @@ function autoCorrelate( buf, sampleRate ) {
 //	var best_frequency = sampleRate/best_offset;
 }
 
+<<<<<<< HEAD
+=======
+// Turns on Hue Bulb and changes the color by changing the hue value  
+function LightOnHue(satVal, hueVal) {
+	let request = new XMLHttpRequest();
+	request.open("PUT", url, true);
+	request.setRequestHeader('Content-Type', 'application/json');
+	request.send(JSON.stringify({"on":true, "sat": satVal, "hue":hueVal}));
+}
+
+// Transforms note to within A4 to G4 
+note * Math.pow(2, 4-octave)
+
+// Checks if the user is signing with range
+function noteToLightCheck(range1, range2, note_match, note_user, satVal, hueVal) {
+	note_match = // This is from the HTML whate note they want to match 
+	range1 = note_match - 5;
+	range2 = note_match + 5;
+
+	if (range1 < note_user && note_user < range2) {
+		LightOnHue(satVal, hueVal);
+	}
+}
+
+// Updates pitch that it is picking up 
+>>>>>>> bb716c3869945ddcae71103d19d0ab205b6f8dce
 function updatePitch( time ) {
 	var cycles = new Array;
 	analyser.getFloatTimeDomainData( buf );
 	var ac = autoCorrelate( buf, audioContext.sampleRate );
+<<<<<<< HEAD
 	// TODO: Paint confidence meter on canvasElem here.
 
 	if (DEBUGCANVAS) {  // This draws the current waveform, useful for debugging
+=======
+
+	// This draws the current waveform, useful for debugging
+	if (DEBUGCANVAS) {  
+>>>>>>> bb716c3869945ddcae71103d19d0ab205b6f8dce
 		waveCanvas.clearRect(0,0,512,256);
 		waveCanvas.strokeStyle = "red";
 		waveCanvas.beginPath();
@@ -343,6 +358,10 @@ function updatePitch( time ) {
 		waveCanvas.stroke();
 	}
 
+<<<<<<< HEAD
+=======
+	// Checks if any sound input has been given. 
+>>>>>>> bb716c3869945ddcae71103d19d0ab205b6f8dce
  	if (ac == -1) {
  		detectorElem.className = "vague";
 	 	pitchElem.innerText = "--";
@@ -353,6 +372,7 @@ function updatePitch( time ) {
 	 	detectorElem.className = "confident";
 	 	pitch = ac;
 	 	pitchElem.innerText = Math.round( pitch ) ;
+<<<<<<< HEAD
 
 	 	// Sets the url for the lightbulb 
 	 	var url = "http://169.254.82.129/api/99MmFck8z1xaA3jvKD1oJD8wVvYyr3iZdOY4vw1U/lights/1/state";
@@ -373,6 +393,69 @@ function updatePitch( time ) {
 		}
 
 
+=======
+	 	calc_pitch = Math.round( pitch ) ;
+
+		// switch (calc_pitch) {
+		// 	case (261.63 - 5 < calc_pitch && calc_pitch < 261.63 + 5): 
+		// 		LightOnHue(1000)
+		// 		console.log('C4')
+		// 		// break;
+			case (277.18 - 5 < calc_pitch && calc_pitch < 277.18 + 5):
+				LightOnHue(35000)
+				console.log('C#4')
+				// break;
+		// 	case (293.66 - 5 < calc_pitch && calc_pitch < 293.66 + 5):
+		// 		// request.send(JSON.stringify({"hue":35000}));
+		// 		console.log('D4')
+		// 		// break;
+		// 	case (311.13):
+		// 		// request.send(JSON.stringify({"hue":35000}));
+		// 		console.log('D#4')
+		// 		// break;
+		// 	case 329.63:
+		// 		// request.send(JSON.stringify({"hue":35000}));
+		// 		console.log('E4')
+		// 		// break;
+		// 	case 349.23:
+		// 		// request.send(JSON.stringify({"hue":35000}));
+		// 		console.log('F4')
+		// 		// break;
+		// 	case 369.99:
+		// 		// request.send(JSON.stringify({"hue":35000}));
+		// 		console.log('F#4')
+		// 		// break;
+		// 	case 392.00:
+		// 		// request.send(JSON.stringify({"hue":35000}));
+		// 		console.log('G4')
+		// 		// break;
+		// 	case 415.30:
+		// 		// request.send(JSON.stringify({"hue":35000}));
+		// 		console.log('G#4')
+		// 		// break;
+		// 	case 440.00:
+		// 		LightOnHue(25500)
+		// 		console.log('A4')
+		// 		// break;
+		// 	case 466.16:
+		// 		LightOnHue(65500)
+		// 		console.log('A#4')
+		// 		// break;
+		// 	case 493.88:
+		// 		LightOnHue(65500)
+		// 		console.log('B4')
+		// 		// break;
+		// 	}
+
+	 	// Checks if the user is singing on key. Checks by pitch. If within +-5, glow green, else glow red
+		if (435 < calc_pitch && calc_pitch < 445) {
+			LightOnHue(25500);
+		}
+		else {
+			LightOnHue(65525); 
+		}
+
+>>>>>>> bb716c3869945ddcae71103d19d0ab205b6f8dce
 	 	var note =  noteFromPitch( pitch );
 		noteElem.innerHTML = noteStrings[note%12];
 		var detune = centsOffFromPitch( pitch, note );
@@ -392,29 +475,3 @@ function updatePitch( time ) {
 		window.requestAnimationFrame = window.webkitRequestAnimationFrame;
 	rafID = window.requestAnimationFrame( updatePitch );
 }
-
-// var url = "http://169.254.82.129/api/99MmFck8z1xaA3jvKD1oJD8wVvYyr3iZdOY4vw1U/lights";
-
-// var request = new XMLHttpRequest();
-// request.open("PUT", url, true);
-// request.setRequestHeader('Content-Type', 'application/json');
-// request.send(JSON.stringify({"on":true}));
-// console.log("success")
-
-// if (noteElem.innerHTML == "A") {
-// 	request.send(JSON.stringify({"hue":35000}));
-// 	console.log("success")
-// }
-
-// var url = "http://169.254.82.129/api/99MmFck8z1xaA3jvKD1oJD8wVvYyr3iZdOY4vw1U/lights/1/state";
-
-// var request = new XMLHttpRequest();
-// request.open("PUT", url, true);
-// request.setRequestHeader('Content-Type', 'application/json');
-// request.send(JSON.stringify({"on":false}));
-// console.log("success")
-
-// if (435 < pitchElem.innerText || pitchElem.innerText < 450) {
-// 	request.send(JSON.stringify({"on":true}));
-// 	console.log("success")
-// }
