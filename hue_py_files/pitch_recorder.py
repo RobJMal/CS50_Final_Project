@@ -77,7 +77,7 @@ score = (in_range / len(medians)) * 100
 print(medians)
 
 # Checks if 50% of notes are within range 
-if score >= 25:
+if score >= 50:
 	requests.put("http://169.254.82.129/api/99MmFck8z1xaA3jvKD1oJD8wVvYyr3iZdOY4vw1U/lights/1/state", data=json.dumps({"on":True, "hue":25500}))
 else:
 	requests.put("http://169.254.82.129/api/99MmFck8z1xaA3jvKD1oJD8wVvYyr3iZdOY4vw1U/lights/1/state", data=json.dumps({"on":True, "hue":65500}))
