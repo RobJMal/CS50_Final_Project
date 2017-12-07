@@ -37,19 +37,23 @@
 		</div>
 
 		<p>
-			<button onclick="bulbOn()">Turn on the lightbulb</button><br>
-			<button onclick="bulbOff()">Turn off the lightbulb</button><br>
+			<button onclick="bulbOn()">On</button><br>
+			<button onclick="bulbOff()">Off</button><br>
 
-			<button onclick="singA()">Sing and see if you can match "a"</button>
-			<button onclick="PUT REQUEST IN THE JAVASCRIPT">a#</button>
-			<button onclick="PUT REQUEST IN THE JAVASCRIPT">b</button>
-			<button onclick="PUT REQUEST IN THE JAVASCRIPT">c</button>
-			<button onclick="PUT REQUEST IN THE JAVASCRIPT">c#</button>
-			<button onclick="PUT REQUEST IN THE JAVASCRIPT">d</button>
-			<button onclick="PUT REQUEST IN THE JAVASCRIPT">d#</button><br>
+			<!-- send the value to javascript, get color from dictionary -->
+			<button type = "radio" name = "note" value = "C" onclick="noteC()">C</button>
+			<button type = "radio" name = "note" value = "C#" onclick="noteCSharp()">C#/Db</button>
+			<button type = "radio" name = "note" value = "D" onclick="noteD()">D</button>
+			<button type = "radio" name = "note" value = "D#" onclick="noteDSharp()">D#/Eb</button>
+			<button type = "radio" name = "note" value = "E" onclick="noteE()">E</button>
+			<button type = "radio" name = "note" value = "F" onclick="noteF()">F</button>
+			<button type = "radio" name = "note" value = "F#" onclick="noteFSharp()">F#/Gb</button>
+			<button type = "radio" name = "note" value = "G" onclick="noteG()">G</button>
+			<button type = "radio" name = "note" value = "G#" onclick="noteGSharp()">G#/Ab</button>
+			<button type = "radio" name = "note" value = "A" onclick="noteA()">A</button>
+			<button type = "radio" name = "note" value = "A#" onclick="noteASharp()">A#/Bb</button>
+			<button type = "radio" name = "note" value = "B" onclick="noteB()">B</button>
 			<!--etc etc-->
-
-			<button onclick="sing()">Sing and see the colors!</button>
 
 		</p>
 
