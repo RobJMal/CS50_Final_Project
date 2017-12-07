@@ -252,7 +252,7 @@ var buf = new Float32Array( buflen );
 
 var noteStrings = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
 
-// Calculates the note from the pitch 
+
 function noteFromPitch( frequency ) {
 	var noteNum = 12 * (Math.log( frequency / 440 )/Math.log(2) );
 	return Math.round( noteNum ) + 69;
@@ -414,29 +414,50 @@ function updatePitch( time ) {
 	 	pitchElem.innerText = Math.round(pitch) ;
 
 	 	var pitch_50 = Math.round(pitch);
+
 	 	var note = noteFromPitch( pitch );
+		var note_50 = noteStrings[note%12];
+		let octave;
 
-	 	//setting octave pitch 
-	 	let octave = 0;
-
-	 	for (var key in octave_lower_bound){
-	 		if (pitch_50 > octave_lower_bound[key] && pitch_50 < octave_upper_bound[key]){
-	 			console.log(key);
-	 			console.log(octave_lower_bound);
-	 			octave = key;
-	 		}
-		}
+		// Approximates octave 
+	 	if (pitch_50 > 16 && pitch_50 < 31){
+	 		octave = 0;
+	 	}
+	 	if (pitch_50 > 32 && pitch_50 < 62){
+	 		octave = 1;
+	 	}
+	 	if (pitch_50 > 65 && pitch_50 < 124){
+	 		octave = 2;
+	 	}
+	 	if (pitch_50 > 130 && pitch_50 < 247){
+	 		octave = 3;
+	 	}
+	 	if (pitch_50 > 261 && pitch_50 < 494){
+	 		octave = 4;
+	 	}
+	 	if (pitch_50 > 523 && pitch_50 < 988){
+	 		octave = 5;
+	 	}
+	 	if (pitch_50 > 1046 && pitch_50 < 1976){
+	 		octave = 6;
+	 	}
+	 	if (pitch_50 > 2093 && pitch_50 < 3952){
+	 		octave = 7;
+	 	}
+	 	if (pitch_50 > 4186 && pitch_50 < 7903){
+	 		octave = 8;
+	 	}
 	 	
 	 	// Transforms the user's pitch to number within 4th octave freq. range. 
 	 	let users_pitch_trans = pitch_50 * Math.pow(2, 4 - octave); 
 
 	 	// Calculates the range of the target note 
-		let range1 = notes_freq_obj[note] - 5;
-		let range2 = notes_freq_obj[note] + 5;
+		let range1 = notes_freq_obj[note_50] - 5;
+		let range2 = notes_freq_obj[note_50] + 5;
 
 		// Checks if the user is singing on key. Checks by pitch. If within +-5, glow green, else glow red
 		if (range1 < users_pitch_trans && users_pitch_trans < range2) {
-			LightOnHue(defaultSat, notes_to_Hue[note]);
+			LightOnHue(defaultSat, notes_to_Hue[note_50]);
 		}
 
 		noteElem.innerHTML = noteStrings[note%12];
