@@ -44,6 +44,22 @@ let notes_to_Hue = {
 	"sharp": 35000 // white
 };
 
+// Code for Light Bulb, vars defined at top
+// Turns on the lightbulb 
+function bulbOn(url_bulb) {
+	let request = new XMLHttpRequest();
+	request.open("PUT", url_bulb, true);
+	request.setRequestHeader('Content-Type', 'application/json');
+	request.send(JSON.stringify({"on":true}));
+}
+
+// Turns off the lightbulb 
+function bulbOff(url_bulb) {
+	let request = new XMLHttpRequest();
+	request.open("PUT", url_bulb, true);
+	request.setRequestHeader('Content-Type', 'application/json');
+	request.send(JSON.stringify({"on":false}));
+}
 
 var audioContext = null;
 var isPlaying = false;
@@ -376,10 +392,15 @@ function updatePitch( time ) {
 	 	pitch = ac;
 	 	pitchElem.innerText = Math.round(pitch) ;
 
+	 	// Stores the pitch of the user 
 	 	var pitch_50 = Math.round(pitch);
 
 	 	var note = noteFromPitch( pitch );
+
+	 	// Stores the note that is passed in through the microphone 
 		var note_50 = noteStrings[note%12];
+		
+		// Stores the value of the octave of the note 
 		let octave;
 
 		// Approximates octave that the user's pitch is in 
@@ -421,7 +442,15 @@ function updatePitch( time ) {
 		// Checks if the user is singing on key. Checks by pitch. If within +-5, glow green, else glow red
 		if (range1 < users_pitch_trans && users_pitch_trans < range2) {
 			LightOnHue(defaultSat, notes_to_Hue[note_50]);
+
+			if (note_50 == "C#" || note_50 == "D#" || note_50 == "F#" || note_50 == "G#" || note_50 == "A#"){
+				LightOnHueSecond(defaultSat, notes_to_Hue['sharp'])
+			}	
+			else {
+				bulbOff(url_second)
+			}
 		}
+
 
 		noteElem.innerHTML = noteStrings[note%12];
 		var detune = centsOffFromPitch( pitch, note );
@@ -442,22 +471,6 @@ function updatePitch( time ) {
 	rafID = window.requestAnimationFrame( updatePitch );
 }
 
-// Code for Light Bulb, vars defined at top
-// Turns on the lightbulb 
-function bulbOn() {
-	let request = new XMLHttpRequest();
-	request.open("PUT", url, true);
-	request.setRequestHeader('Content-Type', 'application/json');
-	request.send(JSON.stringify({"on":true}));
-}
-
-// Turns off the lightbulb 
-function bulbOff() {
-	let request = new XMLHttpRequest();
-	request.open("PUT", url, true);
-	request.setRequestHeader('Content-Type', 'application/json');
-	request.send(JSON.stringify({"on":false}));
-}
 
 // 12 functions for turning on the lightbulb to the color of the specified note
 // We are aware that it'd be easier if the user typed in a note and we had only one function that inserted
