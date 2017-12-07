@@ -1,8 +1,5 @@
-<<<<<<< HEAD
-=======
 // Code is obtained from https://github.com/cwilso/PitchDetect
 
->>>>>>> bb716c3869945ddcae71103d19d0ab205b6f8dce
 /*
 The MIT License (MIT)
 
@@ -29,12 +26,9 @@ SOFTWARE.
 
 window.AudioContext = window.AudioContext || window.webkitAudioContext;
 
-<<<<<<< HEAD
-=======
 // Sets the url for the lightbulb 
 let url = "http://169.254.82.129/api/99MmFck8z1xaA3jvKD1oJD8wVvYyr3iZdOY4vw1U/lights/1/state";
 
->>>>>>> bb716c3869945ddcae71103d19d0ab205b6f8dce
 var audioContext = null;
 var isPlaying = false;
 var sourceNode = null;
@@ -103,11 +97,9 @@ window.onload = function() {
 
 }
 
-
 function error() {
     alert('Stream generation failed.');
 }
-
 
 function getUserMedia(dictionary, callback) {
     try {
@@ -121,7 +113,6 @@ function getUserMedia(dictionary, callback) {
     }
 }
 
-
 function gotStream(stream) {
     // Create an AudioNode from the stream.
     mediaStreamSource = audioContext.createMediaStreamSource(stream);
@@ -132,7 +123,6 @@ function gotStream(stream) {
     mediaStreamSource.connect( analyser );
     updatePitch();
 }
-
 
 function toggleOscillator() {
     if (isPlaying) {
@@ -159,7 +149,6 @@ function toggleOscillator() {
 
     return "stop";
 }
-
 
 function toggleLiveInput() {
     if (isPlaying) {
@@ -222,21 +211,21 @@ var buf = new Float32Array( buflen );
 
 var noteStrings = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
 
+// Calculates the note from the pitch 
 function noteFromPitch( frequency ) {
 	var noteNum = 12 * (Math.log( frequency / 440 )/Math.log(2) );
 	return Math.round( noteNum ) + 69;
 }
 
-
+// Calculates the frequency from the note 
 function frequencyFromNoteNumber( note ) {
 	return 440 * Math.pow(2,(note-69)/12);
 }
 
-
+// Calculates how for user is from exact pitch 
 function centsOffFromPitch( frequency, note ) {
 	return Math.floor( 1200 * Math.log( frequency / frequencyFromNoteNumber( note ))/Math.log(2) );
 }
-
 
 var MIN_SAMPLES = 0;  // will be initialized when AudioContext is created.
 var GOOD_ENOUGH_CORRELATION = 0.9; // this is the "bar" for how close a correlation needs to be
@@ -296,8 +285,22 @@ function autoCorrelate( buf, sampleRate ) {
 //	var best_frequency = sampleRate/best_offset;
 }
 
-<<<<<<< HEAD
-=======
+// Stores the freq of notes in the 4th octave 
+let notes_freq_obj = {
+	"C" : 261.63, 
+	"C#" : 277.18, 
+	"D" : 293.66, 
+	"D#" : 311.13, 
+	"E" : 329.63, 
+	"F" : 349.23, 
+	"F#" : 369.99, 
+	"G" : 392.00, 
+	"G#" : 415.30, 
+	"A" : 440, 
+	"A#" : 466.16, 
+	"B" : 493.88
+}; 
+
 // Turns on Hue Bulb and changes the color by changing the hue value  
 function LightOnHue(satVal, hueVal) {
 	let request = new XMLHttpRequest();
@@ -307,34 +310,25 @@ function LightOnHue(satVal, hueVal) {
 }
 
 // Transforms note to within A4 to G4 
-note * Math.pow(2, 4-octave)
+//note * Math.pow(2, 4-octave)
 
 // Checks if the user is signing with range
 function noteToLightCheck(range1, range2, note_match, note_user, satVal, hueVal) {
-	note_match = // This is from the HTML whate note they want to match 
-	range1 = note_match - 5;
-	range2 = note_match + 5;
+	// Gets the value from the HTML button via radio command 
+	note_match = document.getElementByName("note"); 
 
-	if (range1 < note_user && note_user < range2) {
-		LightOnHue(satVal, hueVal);
-	}
+	// Pass through some dictionary 
 }
 
+
 // Updates pitch that it is picking up 
->>>>>>> bb716c3869945ddcae71103d19d0ab205b6f8dce
 function updatePitch( time ) {
 	var cycles = new Array;
 	analyser.getFloatTimeDomainData( buf );
 	var ac = autoCorrelate( buf, audioContext.sampleRate );
-<<<<<<< HEAD
-	// TODO: Paint confidence meter on canvasElem here.
-
-	if (DEBUGCANVAS) {  // This draws the current waveform, useful for debugging
-=======
 
 	// This draws the current waveform, useful for debugging
 	if (DEBUGCANVAS) {  
->>>>>>> bb716c3869945ddcae71103d19d0ab205b6f8dce
 		waveCanvas.clearRect(0,0,512,256);
 		waveCanvas.strokeStyle = "red";
 		waveCanvas.beginPath();
@@ -358,10 +352,7 @@ function updatePitch( time ) {
 		waveCanvas.stroke();
 	}
 
-<<<<<<< HEAD
-=======
 	// Checks if any sound input has been given. 
->>>>>>> bb716c3869945ddcae71103d19d0ab205b6f8dce
  	if (ac == -1) {
  		detectorElem.className = "vague";
 	 	pitchElem.innerText = "--";
@@ -371,32 +362,97 @@ function updatePitch( time ) {
  	} else {
 	 	detectorElem.className = "confident";
 	 	pitch = ac;
-	 	pitchElem.innerText = Math.round( pitch ) ;
-<<<<<<< HEAD
+	 	pitchElem.innerText = Math.round(pitch) ;
+	 	
+	 	// Transforms the user's pitch to number within 4th octave freq. range. 
+	 	let users_pitch_trans = Math.round(pitch) * Math.pow(2, 4 - octave); 
 
-	 	// Sets the url for the lightbulb 
-	 	var url = "http://169.254.82.129/api/99MmFck8z1xaA3jvKD1oJD8wVvYyr3iZdOY4vw1U/lights/1/state";
+	 	// Calculates the range of the target note 
+		let range1 = note_val - 5;
+		let range2 = note_val + 5;
 
-	 	// Checks if the user is singing on key. Checks by pitch. If within +-5, glow green, else glow red
-	 	// Issues with glowing red.  
-		if (435 < Math.round( pitch ) || Math.round( pitch ) < 450) {
-			var request = new XMLHttpRequest();
-			request.open("PUT", url, true);
-			request.setRequestHeader('Content-Type', 'application/json');
-			request.send(JSON.stringify({"on":true, "hue":25500}));
-		}
-		else {
-			var request = new XMLHttpRequest();
-			request.open("PUT", url, true);
-			request.setRequestHeader('Content-Type', 'application/json');
-			request.send(JSON.stringify({"on":true, "hue":65525}));
+		// Checks if the user is singing on key. Checks by pitch. If within +-5, glow green, else glow red
+		if (note_val - 5 < users_pitch_trans && users_pitch_trans < note_val + 5) {
+			LightOnHue(satVal, hueVal);
 		}
 
+	 	var note = noteFromPitch( pitch );
+		noteElem.innerHTML = noteStrings[note%12];
+		var detune = centsOffFromPitch( pitch, note );
+		if (detune == 0 ) {
+			detuneElem.className = "";
+			detuneAmount.innerHTML = "--";
+		} else {
+			if (detune < 0)
+				detuneElem.className = "flat";
+			else
+				detuneElem.className = "sharp";
+			detuneAmount.innerHTML = Math.abs( detune );
+		}
+	}
 
-=======
-	 	calc_pitch = Math.round( pitch ) ;
+	if (!window.requestAnimationFrame)
+		window.requestAnimationFrame = window.webkitRequestAnimationFrame;
+	rafID = window.requestAnimationFrame( updatePitch );
+}
 
-		// switch (calc_pitch) {
+// Code for Light Bulb, vars defined at top
+function bulbOn() {
+	request.open("PUT", url, true);
+	request.setRequestHeader('Content-Type', 'application/json');
+	request.send(JSON.stringify({"on":true}));
+}
+function bulbOff() {
+	request.open("PUT", url, true);
+	request.setRequestHeader('Content-Type', 'application/json');
+	request.send(JSON.stringify({"on":false}));
+}
+
+// 12 functions for turning on the lightbulb to the color of the specified note
+// We are aware that it'd be easier if the user typed in a note and we had only one function that inserted
+// that note into the dictionary, but we also think that it'd be more fun and user-friendly if the user could
+// click on lots of different buttons and change the light bulbs colors quickly.
+
+// Only one function because getting value
+function noteC() {
+	LightOnHue();
+}
+function noteCSharp() {
+	request.send(JSON.stringify({"xy":notes_to_color['C#']}));
+}
+function noteD() {
+	request.send(JSON.stringify({"xy":notes_to_color['D']}));
+}
+function noteDSharp() {
+	request.send(JSON.stringify({"xy":notes_to_color['D#']}));
+}
+function noteE() {
+	request.send(JSON.stringify({"xy":notes_to_color['E']}));
+}
+function noteF() {
+	request.send(JSON.stringify({"xy":notes_to_color['F']}));
+}
+function noteFSharp() {
+	request.send(JSON.stringify({"xy":notes_to_color['F#']}));
+}
+function noteG() {
+	request.send(JSON.stringify({"xy":notes_to_color['G']}));
+}
+function noteGSharp() {
+	request.send(JSON.stringify({"xy":notes_to_color['G#']}));
+}
+function noteA() {
+	request.send(JSON.stringify({"xy":notes_to_color['A']}));
+}
+function noteASharp() {
+	request.send(JSON.stringify({"xy":notes_to_color['A#']}));
+}
+function noteB() {
+	request.send(JSON.stringify({"xy":notes_to_color['B']}));
+}
+
+
+// switch (calc_pitch) {
 		// 	case (261.63 - 5 < calc_pitch && calc_pitch < 261.63 + 5): 
 		// 		LightOnHue(1000)
 		// 		console.log('C4')
@@ -446,32 +502,3 @@ function updatePitch( time ) {
 		// 		console.log('B4')
 		// 		// break;
 		// 	}
-
-	 	// Checks if the user is singing on key. Checks by pitch. If within +-5, glow green, else glow red
-		if (435 < calc_pitch && calc_pitch < 445) {
-			LightOnHue(25500);
-		}
-		else {
-			LightOnHue(65525); 
-		}
-
->>>>>>> bb716c3869945ddcae71103d19d0ab205b6f8dce
-	 	var note =  noteFromPitch( pitch );
-		noteElem.innerHTML = noteStrings[note%12];
-		var detune = centsOffFromPitch( pitch, note );
-		if (detune == 0 ) {
-			detuneElem.className = "";
-			detuneAmount.innerHTML = "--";
-		} else {
-			if (detune < 0)
-				detuneElem.className = "flat";
-			else
-				detuneElem.className = "sharp";
-			detuneAmount.innerHTML = Math.abs( detune );
-		}
-	}
-
-	if (!window.requestAnimationFrame)
-		window.requestAnimationFrame = window.webkitRequestAnimationFrame;
-	rafID = window.requestAnimationFrame( updatePitch );
-}
