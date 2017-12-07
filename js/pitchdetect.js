@@ -325,6 +325,22 @@ function LightOnHue(urlBulb, satVal, hueVal) {
 	request.send(JSON.stringify({"on":true, "sat": satVal, "hue":hueVal}));
 }
 
+// Turns on the lightbulb 
+function bulbOn() {
+	let request = new XMLHttpRequest();
+	request.open("PUT", url, true);
+	request.setRequestHeader('Content-Type', 'application/json');
+	request.send(JSON.stringify({"on":true}));
+}
+
+// Turns off the lightbulb 
+function bulbOff(urlBulb) {
+	let request = new XMLHttpRequest();
+	request.open("PUT", urlBulb, true);
+	request.setRequestHeader('Content-Type', 'application/json');
+	request.send(JSON.stringify({"on":false}));
+}
+
 // Updates pitch that it is picking up 
 function updatePitch( time ) {
 	var cycles = new Array;
@@ -412,7 +428,14 @@ function updatePitch( time ) {
 
 		// Checks if the user is singing on key. Checks by pitch. If within +-5, glow green, else glow red
 		if (range1 < users_pitch_trans && users_pitch_trans < range2) {
-			LightOnHue(defaultSat, notes_to_Hue[note_50]);
+			LightOnHue(url, defaultSat, notes_to_Hue[note_50]);
+
+			if (note_50 == "C#" || note_50 == "D#" || note_50 == "F#" || note_50 == "G#" || note_50 == "A#"){
+				LightOnHue(url_second, defaultSat, notes_to_Hue['sharp']);
+			}
+			else {
+				bulbOff(url_second);
+			}
 		}
 
 		noteElem.innerHTML = noteStrings[note%12];
@@ -434,22 +457,6 @@ function updatePitch( time ) {
 	rafID = window.requestAnimationFrame( updatePitch );
 }
 
-// Code for Light Bulb, vars defined at top
-// Turns on the lightbulb 
-function bulbOn() {
-	let request = new XMLHttpRequest();
-	request.open("PUT", url, true);
-	request.setRequestHeader('Content-Type', 'application/json');
-	request.send(JSON.stringify({"on":true}));
-}
-
-// Turns off the lightbulb 
-function bulbOff() {
-	let request = new XMLHttpRequest();
-	request.open("PUT", url, true);
-	request.setRequestHeader('Content-Type', 'application/json');
-	request.send(JSON.stringify({"on":false}));
-}
 
 // 12 functions for turning on the lightbulb to the color of the specified note
 // We are aware that it'd be easier if the user typed in a note and we had only one function that inserted
@@ -459,6 +466,7 @@ function bulbOff() {
 // Only one function because getting value
 function noteC() {
 	LightOnHue(url, defaultSat, notes_to_Hue['C']);
+	bulbOff(url_second);
 }
 function noteCSharp() {
 	noteC();
@@ -466,6 +474,7 @@ function noteCSharp() {
 }
 function noteD() {
 	LightOnHue(url, defaultSat, notes_to_Hue['D']);
+	bulbOff(url_second);
 }
 function noteDSharp() {
 	noteD();
@@ -473,9 +482,11 @@ function noteDSharp() {
 }
 function noteE() {
 	LightOnHue(url, notes_to_Hue['ESat'], notes_to_Hue['E']);
+	bulbOff(url_second);
 }
 function noteF() {
 	LightOnHue(url, defaultSat, notes_to_Hue['F']);
+	bulbOff(url_second);
 }
 function noteFSharp() {
 	noteF();
@@ -483,6 +494,7 @@ function noteFSharp() {
 }
 function noteG() {
 	LightOnHue(url, defaultSat, notes_to_Hue['G']);
+	bulbOff(url_second);
 }
 function noteGSharp() {
 	noteG();
@@ -490,6 +502,7 @@ function noteGSharp() {
 }
 function noteA() {
 	LightOnHue(url, defaultSat, notes_to_Hue['A']);
+	bulbOff(url_second);
 }
 function noteASharp() {
 	noteA();
@@ -497,4 +510,5 @@ function noteASharp() {
 }
 function noteB() {
 	LightOnHue(url, defaultSat, notes_to_Hue['B']);
+	bulbOff(url_second);
 }
