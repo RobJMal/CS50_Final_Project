@@ -2,19 +2,15 @@
 
 /*
 The MIT License (MIT)
-
 Copyright (c) 2014 Chris Wilson
-
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
 in the Software without restriction, including without limitation the rights
 to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 copies of the Software, and to permit persons to whom the Software is
 furnished to do so, subject to the following conditions:
-
 The above copyright notice and this permission notice shall be included in all
 copies or substantial portions of the Software.
-
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,8 +22,53 @@ SOFTWARE.
 
 window.AudioContext = window.AudioContext || window.webkitAudioContext;
 
-// Sets the url for the lightbulb 
+// Url for first lightbulb 
 let url = "http://169.254.82.129/api/99MmFck8z1xaA3jvKD1oJD8wVvYyr3iZdOY4vw1U/lights/1/state";
+
+// Url for second lightbulb 
+let url_second = "http://169.254.82.129/api/99MmFck8z1xaA3jvKD1oJD8wVvYyr3iZdOY4vw1U/lights/2/state";
+
+// default saturation value for light bulb
+let defaultSat = 254;
+
+// dictionary that correlates notes to colors
+let notes_to_Hue = {
+	"C": 25550, // green
+	"D": 46920, // blue
+	"E": 46920, // lavender
+	"ESat": 150, // lavender
+	"F": 58000, // pink
+	"G": 0, // red
+	"A": 8000, // orange
+	"B": 19000, // yellow
+	"sharp": 35000 // white
+};
+
+
+let octave_lower_bound = {
+	16: 0,
+	32: 1,
+	65 : 2,
+	130 : 3,
+	261 : 4,
+	523 : 5,
+	1046: 6,
+	2093: 7,
+	4186: 8   
+}; 
+
+let octave_upper_bound = {
+	30: 0,
+	61: 1,
+	123 : 2,
+	246 : 3,
+	493 : 4,
+	987 : 5,
+	1975 : 6,
+	2951 : 7,
+	7902 : 8
+}; 
+
 
 var audioContext = null;
 var isPlaying = false;
@@ -309,16 +350,24 @@ function LightOnHue(satVal, hueVal) {
 	request.send(JSON.stringify({"on":true, "sat": satVal, "hue":hueVal}));
 }
 
+// Turns on Hue Bulb and changes the color by changing the hue value  
+function LightOnHueSecond(satVal, hueVal) {
+	let request = new XMLHttpRequest();
+	request.open("PUT", url_second, true);
+	request.setRequestHeader('Content-Type', 'application/json');
+	request.send(JSON.stringify({"on":true, "sat": satVal, "hue":hueVal}));
+}
+
 // Transforms note to within A4 to G4 
 //note * Math.pow(2, 4-octave)
 
 // Checks if the user is signing with range
-function noteToLightCheck(range1, range2, note_match, note_user, satVal, hueVal) {
+// function noteToLightCheck(range1, range2, note_match, note_user, satVal, hueVal) {
 	// Gets the value from the HTML button via radio command 
-	note_match = document.getElementByName("note"); 
+	// note_match = document.getElementByName("note"); 
 
 	// Pass through some dictionary 
-}
+// }
 
 
 // Updates pitch that it is picking up 
@@ -363,9 +412,22 @@ function updatePitch( time ) {
 	 	detectorElem.className = "confident";
 	 	pitch = ac;
 	 	pitchElem.innerText = Math.round(pitch) ;
+
+	 	pitch_50 = Math.round(pitch);
+
+	 	//setting octave pitch 
+	 	let octave = 0;
+
+	 	for(var key in octave_lower_bound){
+	 		if(pitch_50 > octave_lower_bound[key] && pitch_50 < octave_upper_bound[key]){
+	 			console.log(key);
+	 			console.log(octave_lower_bound);
+	 			octave = i;
+	 		}
+		};
 	 	
 	 	// Transforms the user's pitch to number within 4th octave freq. range. 
-	 	let users_pitch_trans = Math.round(pitch) * Math.pow(2, 4 - octave); 
+	 	let users_pitch_trans = pitch_50 * Math.pow(2, 4 - octave); 
 
 	 	// Calculates the range of the target note 
 		let range1 = note_val - 5;
@@ -415,40 +477,45 @@ function bulbOff() {
 
 // Only one function because getting value
 function noteC() {
-	LightOnHue();
+	LightOnHue(defaultSat, notes_to_Hue['C']);
 }
 function noteCSharp() {
-	request.send(JSON.stringify({"xy":notes_to_color['C#']}));
+	noteC();
+	LightOnHueSecond(defaultSat, notes_to_Hue['sharp']);
 }
 function noteD() {
-	request.send(JSON.stringify({"xy":notes_to_color['D']}));
+	LightOnHue(defaultSat, notes_to_Hue['D']);
 }
 function noteDSharp() {
-	request.send(JSON.stringify({"xy":notes_to_color['D#']}));
+	noteD();
+	LightOnHueSecond(defaultSat, notes_to_Hue['sharp']);
 }
 function noteE() {
-	request.send(JSON.stringify({"xy":notes_to_color['E']}));
+	LightOnHue(notes_to_Hue['ESat'], notes_to_Hue['E']);
 }
 function noteF() {
-	request.send(JSON.stringify({"xy":notes_to_color['F']}));
+	LightOnHue(defaultSat, notes_to_Hue['F']);
 }
 function noteFSharp() {
-	request.send(JSON.stringify({"xy":notes_to_color['F#']}));
+	noteF();
+	LightOnHueSecond(defaultSat, notes_to_Hue['sharp']);
 }
 function noteG() {
-	request.send(JSON.stringify({"xy":notes_to_color['G']}));
+	LightOnHue(defaultSat, notes_to_Hue['G']);
 }
 function noteGSharp() {
-	request.send(JSON.stringify({"xy":notes_to_color['G#']}));
+	noteG();
+	LightOnHueSecond(defaultSat, notes_to_Hue['sharp']);
 }
 function noteA() {
-	request.send(JSON.stringify({"xy":notes_to_color['A']}));
+	LightOnHue(defaultSat, notes_to_Hue['A']);
 }
 function noteASharp() {
-	request.send(JSON.stringify({"xy":notes_to_color['A#']}));
+	noteA();
+	LightOnHueSecond(defaultSat, notes_to_Hue['A']);
 }
 function noteB() {
-	request.send(JSON.stringify({"xy":notes_to_color['B']}));
+	LightOnHue(defaultSat, notes_to_Hue['B']);
 }
 
 
@@ -457,9 +524,9 @@ function noteB() {
 		// 		LightOnHue(1000)
 		// 		console.log('C4')
 		// 		// break;
-			case (277.18 - 5 < calc_pitch && calc_pitch < 277.18 + 5):
-				LightOnHue(35000)
-				console.log('C#4')
+		//	case (277.18 - 5 < calc_pitch && calc_pitch < 277.18 + 5):
+		//		LightOnHue(35000)
+		//		console.log('C#4')
 				// break;
 		// 	case (293.66 - 5 < calc_pitch && calc_pitch < 293.66 + 5):
 		// 		// request.send(JSON.stringify({"hue":35000}));
